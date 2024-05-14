@@ -1,20 +1,43 @@
 import React from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
-import App from "./App"
 import { store } from "./app/store"
 import "./index.css"
 import {
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider 
 } from "react-router-dom";
+
+import Layout from "./components/Layout/Layout"
+
+import Home from "./pages/Home/Home"
+import Login from "./pages/Login/Login"
+import Profile from "./pages/Profile/Profile"
+import Transaction from "./pages/Transaction/Transaction"
 
 const container = document.getElementById("root")
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App/>,
+    element: <Layout/>,
+    children :[
+      {
+        path: "/",
+        element: <Home/>,
+      },
+      {
+        path: "/login",
+        element: <Login/>,
+      },
+      {
+        path: "/profile",
+        element: <Profile/>,
+      },
+      {
+        path: "/transaction",
+        element: <Transaction/>,
+      },
+    ],
   },
 ]);
 
