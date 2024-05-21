@@ -162,7 +162,7 @@ body {
   padding: 8px;
   font-size: 1.1rem;
   font-weight: bold;
-  margin-top: 1rem;
+  margin: 1rem auto 0 auto;
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
