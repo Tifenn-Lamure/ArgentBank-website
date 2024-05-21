@@ -23,7 +23,7 @@ const initialState: LoginSliceState = {
   lastname: '',
   username: '',
   email: '',
-  isAuthenticated: false
+  isAuthenticated: localStorage.getItem("token") ? true : false
 }
 
 export const authSlice = createAppSlice({

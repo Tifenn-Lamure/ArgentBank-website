@@ -15,6 +15,8 @@ import Login from "./pages/Login/Login"
 import Profile from "./pages/Profile/Profile"
 import Transaction from "./pages/Transaction/Transaction"
 
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
+
 const container = document.getElementById("root")
 
 const router = createBrowserRouter([
@@ -30,13 +32,18 @@ const router = createBrowserRouter([
         element: <Login/>,
       },
       {
-        path: "/profile",
-        element: <Profile/>,
-      },
-      {
-        path: "/transaction",
-        element: <Transaction/>,
-      },
+        element: <ProtectedRoute/>,
+        children : [
+          {
+            path: "/profile",
+            element: <Profile/>
+          },
+          {
+            path: "/transaction",
+            element: <Transaction/>
+          },
+        ]
+      }
     ],
   },
 ]);
