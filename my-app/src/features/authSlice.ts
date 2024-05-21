@@ -6,6 +6,7 @@ export interface LoginSliceState {
   lastname: string;
   username: string;
   email: string;
+  isAuthenticated: boolean
 }
 
 interface DataFromLogin {
@@ -21,30 +22,9 @@ const initialState: LoginSliceState = {
   firstname: '',
   lastname: '',
   username: '',
-  email: ''
+  email: '',
+  isAuthenticated: false
 }
-
-const setToken = (token: string) => {
-  localStorage.setItem("token", token);
-  // const now = new Date(Date.now()).getTime().toString();
-  // localStorage.setItem("lastLoginTime", now);
-};
-
-export const getToken = () => {
-  return localStorage.getItem("token");
-
-  // const now = new Date(Date.now()).getTime();
-  // const timeAllowed = 1000 * 60 * 30;
-
-  // const lastLoginTimeDate = localStorage.getItem("lastLoginTime");
-  // if(lastLoginTimeDate) {
-  //   const timeSinceLastLogin = now - new Date(lastLoginTimeDate).getTime();
-  //   if (timeSinceLastLogin < timeAllowed) {
-  //       return localStorage.getItem("token");
-  //   }
-  // }
-  
-};
 
 export const authSlice = createAppSlice({
   name: "auth",
@@ -70,8 +50,13 @@ export const authSlice = createAppSlice({
         state.email = newEmail.payload
       }
     ),
+    setIsAuthenticated: create.reducer(
+      (state, newIsAuthenticated: PayloadAction<boolean>) => {
+        state.isAuthenticated = newIsAuthenticated.payload
+      }
+    ),
     login: create.asyncThunk(
-      async (data: DataFromLogin) => {
+      async (data: DataFromLogin, {dispatch}) => {
         const payload: Payload = {email: data.username, password: data.password}
 
         const response = await fetch('http://localhost:3001/api/v1/user/login', {
@@ -85,7 +70,7 @@ export const authSlice = createAppSlice({
         if (response.ok) {
           const dataJSON = await response.json();
           if (dataJSON.status === 200) {
-            setToken(dataJSON.body.token);
+            dispatch(authSlice.actions.setAuthToken(dataJSON.body.token))
           }
           return dataJSON;
         } else {
@@ -93,14 +78,24 @@ export const authSlice = createAppSlice({
           return Promise.reject(errors);
         }
       },
-
     ),
+    setAuthToken: create.asyncThunk(
+      async (token: string | null, {dispatch}) => {
+        if (token !== null) {
+          localStorage.setItem("token", token);
+          dispatch(authSlice.actions.setIsAuthenticated(true))
+        } else {
+          localStorage.removeItem("token");
+          dispatch(authSlice.actions.setIsAuthenticated(false))
+        }
+      }
+    )
   }),
-  // selectors: {
-  //   selectCount: counter => counter.value,
-  // },
+  selectors: {
+    selectIsAuthenticated: auth => auth.isAuthenticated,
+  },
 })
 
-export const { login, setFirstname } = authSlice.actions
+export const { login, setAuthToken } = authSlice.actions
 
-// export const { selectCount, selectStatus } = counterSlice.selectors
+export const { selectIsAuthenticated } = authSlice.selectors
