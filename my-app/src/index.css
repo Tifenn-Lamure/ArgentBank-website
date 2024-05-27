@@ -191,10 +191,11 @@ body {
 .input-edit-name input {
   padding: 5px;
   margin-left: 5px;
-  font-size: 0.5rem;
+  font-size: 1rem;
   border-radius: 5px;
   border-width: 0.1rem;
   border-color: #eaeaea;
+  width: 130px;
 }
 
 .save-cancel-button-display {
@@ -211,11 +212,16 @@ body {
   border-radius: 3px;
   color: white;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .edit-name-text {
 color: #222;
-font-size: 12px;
+font-size: 16px;
+}
+
+.read-only-input {
+  background-color: rgb(238, 238, 238);
 }
 
 .input-remember {

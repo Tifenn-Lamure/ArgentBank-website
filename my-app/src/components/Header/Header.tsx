@@ -2,7 +2,7 @@ import argentBank from '../../../assets/img/argentBankLogo.png'
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from "../../app/hooks";
-import { selectIsAuthenticated, setAuthToken } from '../../features/authSlice';
+import { selectIsAuthenticated, setAuthToken, selectFirstname } from '../../features/authSlice';
 import { useNavigate } from "react-router";
 
 
@@ -12,6 +12,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const isAuth = useSelector(selectIsAuthenticated)
+    const firstname = useSelector(selectFirstname)
 
     const logOutUser = async() => {
         await dispatch(setAuthToken(null))
@@ -32,7 +33,7 @@ const Header = () => {
                 {isAuth ? 
                     <div style={{display: 'flex', gap: '1em'}}>
                         <div>
-                            Bonjour Tony
+                            Bonjour {firstname}
                         </div>                    
                         <div className="main-nav-item" onClick={() => logOutUser()}>
                             <i className="fa fa-user-circle"></i>
