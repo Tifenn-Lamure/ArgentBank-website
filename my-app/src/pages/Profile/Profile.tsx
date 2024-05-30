@@ -1,13 +1,13 @@
 import Account from "../../components/Account/Account";
 import { useState } from "react";
-import { selectUsername, selectFirstname, selectLastname, setAuthToken, setUsername } from '../../features/authSlice';
+import { selectUsername, selectFirstname, selectLastname, setUsername } from '../../features/authSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from "../../app/hooks";
 
 
 const Profile = () => {
 
-    const [isSignInContentActive, setSignInContentActive] = useState(false);
+    const [isEditProfileContentActive, setEditProfileContentActive] = useState(false);
 
     const username = useSelector(selectUsername)
     const firstname = useSelector(selectFirstname)
@@ -20,22 +20,22 @@ const Profile = () => {
         //à terme, modifier la fonction du store pour qu'elle utilise un thunk asynchrone
         //et fasse un appel API pour mettre à jour l'utilisateur en DB
         await dispatch(setUsername(tempUsername))
-        setSignInContentActive(false)
+        setEditProfileContentActive(false)
     }
 
     const cancelUsername = () => {
         setTempUsername(username)
-        setSignInContentActive(false)
+        setEditProfileContentActive(false)
     }
 
     return(
         <>
             <main className="main bg-dark">
                 <div className="header">
-                    {!isSignInContentActive ? 
+                    {!isEditProfileContentActive ? 
                         <div>
                             <h1>Welcome back<br />{firstname} {lastname}!</h1>
-                            <button className="save-cancel-edit-button" onClick={() => setSignInContentActive(true)}>Edit Name</button>
+                            <button className="save-cancel-edit-button" onClick={() => setEditProfileContentActive(true)}>Edit Name</button>
                         </div>
                     :
                         <section className="sign-in-content">   
