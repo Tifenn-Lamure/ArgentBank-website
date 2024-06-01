@@ -35,9 +35,9 @@ const Header = () => {
                         <Link className="main-nav-item" style={{fontWeight: '400'}} to={`/profile`}>
                             Bonjour {username}
                         </Link>                    
-                        <div className="main-nav-item" onClick={() => logOutUser()}>
+                        <div className="main-nav-item" onClick={() => logOutUser()} style={{display: 'flex', gap: '.2em', fontWeight: '400'}}>
                             <i className="fa fa-user-circle"></i>
-                            Log out
+                            <div>Log out</div>
                         </div>
                     </div>
                 :

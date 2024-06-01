@@ -14,20 +14,27 @@ interface DataFromLogin {
   password: string;
 }
 interface DataFromSignin {
-  firstname: string;
-  lastname: string;
-  username: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
   email: string;
   password: string;
 }
 
 const initialState: LoginSliceState = {
-  firstname: localStorage.getItem("token") ? 'Tony' : '',
-  lastname: localStorage.getItem("token") ? 'Stark' : '',
-  username: localStorage.getItem("token") ? 'Iron' : '',
-  email: localStorage.getItem("token") ? 'tony@stark.com' : '',
+  firstname: '',
+  lastname:  '',
+  username: '',
+  email: '',
   isAuthenticated: localStorage.getItem("token") ? true : false
 }
+// const initialState: LoginSliceState = {
+//   firstname: localStorage.getItem("token") ? 'Tony' : '',
+//   lastname: localStorage.getItem("token") ? 'Stark' : '',
+//   username: localStorage.getItem("token") ? 'Iron' : '',
+//   email: localStorage.getItem("token") ? 'tony@stark.com' : '',
+//   isAuthenticated: localStorage.getItem("token") ? true : false
+// }
 
 export const authSlice = createAppSlice({
   name: "auth",
@@ -74,11 +81,7 @@ export const authSlice = createAppSlice({
           const dataJSON = await response.json();
           if (dataJSON.status === 200) {
             dispatch(authSlice.actions.setAuthToken(dataJSON.body.token))
-            // on récupèrerait ici et stockerait dans le store les données de l'utilisateur qui vient de se connecter
-            dispatch(authSlice.actions.setEmail('tony@stark.com'))
-            dispatch(authSlice.actions.setUsername('Iron'))
-            dispatch(authSlice.actions.setFirstname('Tony'))
-            dispatch(authSlice.actions.setLastname('Stark'))
+            dispatch(authSlice.actions.fetchUser())
           }
           return dataJSON;
         } else {
@@ -89,7 +92,7 @@ export const authSlice = createAppSlice({
     ),
     signin: create.asyncThunk(
       async (data: DataFromSignin) => {
-        const payload: DataFromSignin = {email: data.email, password: data.password, firstname: data.firstname, lastname: data.lastname, username: data.username}
+        const payload: DataFromSignin = {email: data.email, password: data.password, firstName: data.firstName, lastName: data.lastName, userName: data.userName}
 
         const response = await fetch('http://localhost:3001/api/v1/user/signup', {
           method: "POST",
@@ -105,6 +108,62 @@ export const authSlice = createAppSlice({
         } else {
           const errors = await response.json();
           return Promise.reject(errors);
+        }
+      },
+    ),
+    fetchUser: create.asyncThunk(
+      async (_, {dispatch}) => {
+        const userToken = localStorage.getItem("token") 
+        if(userToken){
+          const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${userToken}`
+            },
+          })
+
+          if (response.ok) {
+            const dataJSON = await response.json();
+            if (dataJSON.status === 200) {
+              dispatch(authSlice.actions.setEmail(dataJSON.body.email))
+              dispatch(authSlice.actions.setUsername(dataJSON.body.userName))
+              dispatch(authSlice.actions.setFirstname(dataJSON.body.firstName))
+              dispatch(authSlice.actions.setLastname(dataJSON.body.lastName))
+            }
+            return dataJSON;
+          } else {
+            const errors = await response.json();
+            return Promise.reject(errors);
+          }
+        }
+        return null;
+      },
+    ),
+    updateUser: create.asyncThunk(
+      async (userName: string, {dispatch}) => {
+        const userToken = localStorage.getItem("token") 
+        if(userToken){
+          const payload: {userName: string} = {userName}
+          const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${userToken}`
+            },
+            body: JSON.stringify(payload),
+          })
+
+          if (response.ok) {
+            const dataJSON = await response.json();
+            if (dataJSON.status === 200) {
+              dispatch(authSlice.actions.setUsername(dataJSON.body.userName))
+            }
+            return dataJSON;
+          } else {
+            const errors = await response.json();
+            return Promise.reject(errors);
+          }
         }
       },
     ),
@@ -128,6 +187,6 @@ export const authSlice = createAppSlice({
   },
 })
 
-export const { login, signin, setAuthToken, setUsername } = authSlice.actions
+export const { login, signin, setAuthToken, setUsername, updateUser } = authSlice.actions
 
 export const { selectIsAuthenticated, selectUsername, selectFirstname, selectLastname } = authSlice.selectors

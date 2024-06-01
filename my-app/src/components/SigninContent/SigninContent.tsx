@@ -8,7 +8,7 @@ const SigninContent = () => {
 
     const signInUser = async (e: any) => {
         e.preventDefault()
-        const res = await dispatch(signin({email, password, firstname, lastname, username}))
+        const res = await dispatch(signin({email, password, firstName: firstname, lastName: lastname, userName: username}))
         if(res.payload != undefined) {
             setConnectionState(connectionStateValues.Success)
         }
