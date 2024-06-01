@@ -10,10 +10,13 @@ export interface LoginSliceState {
 }
 
 interface DataFromLogin {
-  username: string;
+  email: string;
   password: string;
 }
-interface Payload {
+interface DataFromSignin {
+  firstname: string;
+  lastname: string;
+  username: string;
   email: string;
   password: string;
 }
@@ -57,7 +60,7 @@ export const authSlice = createAppSlice({
     ),
     login: create.asyncThunk(
       async (data: DataFromLogin, {dispatch}) => {
-        const payload: Payload = {email: data.username, password: data.password}
+        const payload: DataFromLogin = {email: data.email, password: data.password}
 
         const response = await fetch('http://localhost:3001/api/v1/user/login', {
           method: "POST",
@@ -77,6 +80,27 @@ export const authSlice = createAppSlice({
             dispatch(authSlice.actions.setFirstname('Tony'))
             dispatch(authSlice.actions.setLastname('Stark'))
           }
+          return dataJSON;
+        } else {
+          const errors = await response.json();
+          return Promise.reject(errors);
+        }
+      },
+    ),
+    signin: create.asyncThunk(
+      async (data: DataFromSignin) => {
+        const payload: DataFromSignin = {email: data.email, password: data.password, firstname: data.firstname, lastname: data.lastname, username: data.username}
+
+        const response = await fetch('http://localhost:3001/api/v1/user/signup', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+
+        if (response.ok) {
+          const dataJSON = await response.json();
           return dataJSON;
         } else {
           const errors = await response.json();
@@ -104,6 +128,6 @@ export const authSlice = createAppSlice({
   },
 })
 
-export const { login, setAuthToken, setUsername } = authSlice.actions
+export const { login, signin, setAuthToken, setUsername } = authSlice.actions
 
 export const { selectIsAuthenticated, selectUsername, selectFirstname, selectLastname } = authSlice.selectors

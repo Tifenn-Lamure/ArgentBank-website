@@ -2,7 +2,7 @@ import argentBank from '../../../assets/img/argentBankLogo.png'
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from "../../app/hooks";
-import { selectIsAuthenticated, setAuthToken, selectFirstname } from '../../features/authSlice';
+import { selectIsAuthenticated, setAuthToken, selectUsername } from '../../features/authSlice';
 import { useNavigate } from "react-router";
 
 
@@ -12,7 +12,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const isAuth = useSelector(selectIsAuthenticated)
-    const firstname = useSelector(selectFirstname)
+    const username = useSelector(selectUsername)
 
     const logOutUser = async() => {
         await dispatch(setAuthToken(null))
@@ -32,9 +32,9 @@ const Header = () => {
                 </Link>
                 {isAuth ? 
                     <div style={{display: 'flex', gap: '1em'}}>
-                        <div>
-                            Bonjour {firstname}
-                        </div>                    
+                        <Link className="main-nav-item" style={{fontWeight: '400'}} to={`/profile`}>
+                            Bonjour {username}
+                        </Link>                    
                         <div className="main-nav-item" onClick={() => logOutUser()}>
                             <i className="fa fa-user-circle"></i>
                             Log out
@@ -42,9 +42,9 @@ const Header = () => {
                     </div>
                 :
                     <div>
-                        <Link className="main-nav-item" to={`/login`}>
+                        <Link className="main-nav-item" to={`/login`} style={{display: 'flex', gap: '.2em', fontWeight: '400'}}>
                             <i className="fa fa-user-circle"></i>
-                            Sign In
+                            <div>Log In</div>
                         </Link>
                     </div>
                 }
