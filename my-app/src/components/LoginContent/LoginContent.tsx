@@ -24,7 +24,7 @@ const LoginContent = () => {
 
     return(
         <>
-            <section className="sign-in-content" style={{paddingTop: '5em'}}>
+            <section className="sign-in-content" style={{paddingTop: '5em'}} id="logincard">
                 <i className="fa fa-user-circle sign-in-icon"></i>
                 <h1>Log In</h1>
                 <form>

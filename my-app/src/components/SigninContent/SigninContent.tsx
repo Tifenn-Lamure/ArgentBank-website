@@ -1,7 +1,26 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { signin } from "../../features/authSlice";
+import styled from "styled-components";
 
+const AlreadyAccLink = styled.a `
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+
+    @media screen and (min-width: 768px){
+        display: none;
+    } 
+`
+
+const AltTextLaptop = styled.div `
+    font-weight: bold;
+    
+    @media screen and (max-width: 768px){
+        display: none;
+    } 
+`
 const SigninContent = () => {
 
     const dispatch = useAppDispatch()
@@ -22,6 +41,7 @@ const SigninContent = () => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
+    // const navigateToLogin = useNavigate();
 
     enum connectionStateValues {
         HasNotTried = 0,
@@ -31,10 +51,12 @@ const SigninContent = () => {
 
     const [connectionState, setConnectionState] = useState(connectionStateValues.HasNotTried);
 
+
     return(
         <>
             <section className="sign-in-content">
-                <div style={{fontWeight: 'bold'}}>No account yet?</div>
+                <AlreadyAccLink href="#logincard">Already an account?</AlreadyAccLink>
+                <AltTextLaptop>No account yet?</AltTextLaptop>
                 <h1>Sign In</h1>
                 <form>
                     <div className="input-wrapper">
@@ -70,7 +92,9 @@ const SigninContent = () => {
                 </form>
             </section>
         </>
-    )
-}
+    )}
+
 
 export default SigninContent;
+
+

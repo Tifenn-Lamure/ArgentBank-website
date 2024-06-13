@@ -21,6 +21,11 @@ const CollapseParent = styled.div`
     width: 80%;
     margin: 0 auto 1em auto;
     text-align: left;
+
+    @media screen and (max-width: 768px){
+       text-align: center;
+        width: 90%;
+    }
 `
 
 const CollapseHead = styled.div`
@@ -31,19 +36,24 @@ const CollapseHead = styled.div`
     padding: 0.3em;
     align-items: center;
     background-color: white;
+
+    @media screen and (max-width: 768px){
+        grid-template-columns: 25% 25% 20% 25% 5%;
+        font-size: 14px;
+    }
 `
 
-const CollapseBody = styled.div`
+const CollapseBody = styled.div<{ $isCollapseActive: boolean }>`
     position: relative;
-    max-height: ${({isCollapseActive}) => isCollapseActive ? '100%' : '0'};
-    transform: ${({isCollapseActive}) => isCollapseActive ? 'translateY(0)' : 'translateY(-100%)'}; 
+    max-height: ${({$isCollapseActive}) => $isCollapseActive ? '100%' : '0'};
+    transform: ${({$isCollapseActive}) => $isCollapseActive ? 'translateY(0)' : 'translateY(-100%)'}; 
     z-index: 1;
     transition: all 0.5s;
     background-color:white;
     > *{
         padding: 1rem;
-        max-height: ${({isCollapseActive}) => isCollapseActive ? '100%' : '0'};
-        transform: ${({isCollapseActive}) => isCollapseActive ? 'translateY(0)' : 'translateY(-100%)'}; 
+        max-height: ${({$isCollapseActive}) => $isCollapseActive ? '100%' : '0'};
+        transform: ${({$isCollapseActive}) => $isCollapseActive ? 'translateY(0)' : 'translateY(-100%)'}; 
         transition: all 0.5s;
         overflow: hidden;
     }
@@ -54,12 +64,26 @@ const CollapseBodyLine = styled.div`
     grid-template-columns: 15% 50% 15% 15% 5%;
     padding: 0.45em 0.3em;
     align-items: center;
+
+    @media screen and (max-width: 768px){
+        grid-template-columns: 50% 35%;
+    }
+`
+const CollapseBodyElement = styled.div `
+    @media screen and (max-width: 768px){
+        margin: 0 0.5rem 0 0.5rem;
+            font-size: 14px;
+    }
 `
 
-const IconChevron = styled(FontAwesomeIcon)`
-    transform: ${({isCollapseActive}) => isCollapseActive ? 'rotate(-180deg)' : 'rotate(0deg)'};
+const IconChevron = styled(FontAwesomeIcon)<{ $isCollapseActive: boolean }>`
+    transform: ${({$isCollapseActive}) => $isCollapseActive ? 'rotate(-180deg)' : 'rotate(0deg)'};
     transition: transform 0.3s ease-in-out;
     margin: 0 auto;
+
+    @media screen and (max-width: 768px){
+       font-size: 95%;  
+    }
 `
 
 const ModifyCell = styled.div`
@@ -73,58 +97,30 @@ const Dropdown = ({transactionDate, transactionDescription, transactionAmount, t
     const [isCollapseActive, updateCollapseActive] = useState(false);
     
     return(
-        // <>
-        //     <div className="dropdown-global-data">
-        //         <div className="dropdown-main-data">
-        //             <div className="dropdown-main-data-text">{transactionDate}</div>
-        //             <div className="dropdown-main-data-text">{transactionDescription}</div>
-        //             <div className="dropdown-main-data-text">{transactionAmount}</div>
-        //             <div className="dropdown-main-data-text">{transactionBalance}</div>
-        //             <div className="dropdown-main-data-text">icon chevron ici</div>
-        //         </div>
-        //         <div className="dropdown-hidden-data-flex">
-        //             <div className="dropdown-hidden-data-flex-section">
-        //                 <div className="data-title">Transaction type</div>
-        //                 <div className="data-input">{transactionType}</div>
-        //             </div>
-        //             <div className="dropdown-hidden-data-flex-section">
-        //                 <div className="data-title">Category</div>
-        //                 <div className="data-input">{transactionCategory}</div>
-        //                 <img src={iconPencil}></img>
-        //             </div>
-        //             <div className="dropdown-hidden-data-flex-section">
-        //                 <div className="data-title">Note</div>
-        //                 <div className="data-input">{transactionNote}</div>
-        //                 <img src={iconPencil}></img>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </>
-
         <CollapseParent>
             <CollapseHead onClick={() => updateCollapseActive(!isCollapseActive)}>
-                <div>{transactionDate}</div>
-                <div>{transactionDescription}</div>
-                <div>{transactionAmount}</div>
-                <div>{transactionBalance}</div>
-                <IconChevron icon={faChevronUp} size="xl" isCollapseActive={isCollapseActive}/>
+                <CollapseBodyElement>{transactionDate}</CollapseBodyElement>
+                <CollapseBodyElement>{transactionDescription}</CollapseBodyElement>
+                <CollapseBodyElement>{transactionAmount}</CollapseBodyElement>
+                <CollapseBodyElement>{transactionBalance}</CollapseBodyElement>
+                <IconChevron icon={faChevronUp} size="xl" $isCollapseActive={isCollapseActive}/>
             </CollapseHead>
-            <CollapseBody isCollapseActive={isCollapseActive}>
+            <CollapseBody $isCollapseActive={isCollapseActive}>
                 <CollapseBodyLine>
-                    <div>Transaction type</div>
-                    <div>{transactionType}</div>
+                    <CollapseBodyElement>Transaction type</CollapseBodyElement>
+                    <CollapseBodyElement>{transactionType}</CollapseBodyElement>
                 </CollapseBodyLine>
                 <CollapseBodyLine>
-                    <div>Category</div>
+                    <CollapseBodyElement>Category</CollapseBodyElement>
                     <ModifyCell>
-                        <div>{transactionCategory}</div>
+                        <CollapseBodyElement>{transactionCategory}</CollapseBodyElement>
                         <FontAwesomeIcon icon={faPencil} size="sm"/>
                     </ModifyCell>
                 </CollapseBodyLine>
                 <CollapseBodyLine>
-                    <div>Note</div>
+                    <CollapseBodyElement>Note</CollapseBodyElement>
                     <ModifyCell>
-                        <div>{transactionNote}</div>
+                        <CollapseBodyElement>{transactionNote}</CollapseBodyElement>
                         <FontAwesomeIcon icon={faPencil} size="sm"/>
                     </ModifyCell>
                 </CollapseBodyLine>
