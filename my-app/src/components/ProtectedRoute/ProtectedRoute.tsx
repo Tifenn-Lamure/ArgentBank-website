@@ -1,4 +1,3 @@
-// ProtectedRoute.tsx
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import { selectIsAuthenticated } from '../../features/authSlice';

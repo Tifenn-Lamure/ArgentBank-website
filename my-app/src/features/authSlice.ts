@@ -28,13 +28,6 @@ const initialState: LoginSliceState = {
   email: '',
   isAuthenticated: localStorage.getItem("token") ? true : false
 }
-// const initialState: LoginSliceState = {
-//   firstname: localStorage.getItem("token") ? 'Tony' : '',
-//   lastname: localStorage.getItem("token") ? 'Stark' : '',
-//   username: localStorage.getItem("token") ? 'Iron' : '',
-//   email: localStorage.getItem("token") ? 'tony@stark.com' : '',
-//   isAuthenticated: localStorage.getItem("token") ? true : false
-// }
 
 export const authSlice = createAppSlice({
   name: "auth",

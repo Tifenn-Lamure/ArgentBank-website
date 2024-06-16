@@ -41,7 +41,6 @@ const SigninContent = () => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
-    // const navigateToLogin = useNavigate();
 
     enum connectionStateValues {
         HasNotTried = 0,
