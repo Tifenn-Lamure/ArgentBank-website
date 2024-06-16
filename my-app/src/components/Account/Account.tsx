@@ -4,12 +4,10 @@ interface AccountProps {
     AccountName: string;
     AccountAmount: string;
     AccountDescription: string;
+    DisplayTransactionButton: boolean;
 }
 
-
-
-
-const Account = ({AccountName, AccountAmount, AccountDescription}: AccountProps) => {
+const Account = ({AccountName, AccountAmount, AccountDescription, DisplayTransactionButton}: AccountProps) => {
     return(
         <>
             <section className="account">
@@ -19,9 +17,15 @@ const Account = ({AccountName, AccountAmount, AccountDescription}: AccountProps)
                     <p className="account-amount-description">{AccountDescription}</p>
                 </div>
                 <div className="account-content-wrapper cta">
+                {DisplayTransactionButton ?
                     <Link to={'/transaction'}>
                         <button className="save-cancel-edit-button">View transactions</button>
                     </Link>
+                    :
+                    <Link to={'/profile'} style={{textDecoration: 'none'}}>
+                        <i className="fa fa-close closeCross"></i>
+                    </Link>
+                }
                 </div>
             </section>
         </>

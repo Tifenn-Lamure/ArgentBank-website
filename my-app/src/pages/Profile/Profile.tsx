@@ -69,16 +69,19 @@ const Profile = () => {
                 AccountName="Argent Bank Checking (x8349)"
                 AccountAmount="2,082.79"
                 AccountDescription="Available Balance"
+                DisplayTransactionButton={true}
                 ></Account>
                 <Account 
                 AccountName="Argent Bank Savings (x6712)"
                 AccountAmount="10,928.42"
                 AccountDescription="Available Balance"
+                DisplayTransactionButton={true}
                 ></Account>
                 <Account 
                 AccountName="Argent Bank Credit Card (x8349)"
                 AccountAmount="184.30"
                 AccountDescription="Current Balance"
+                DisplayTransactionButton={true}
                 ></Account>
             </main>
         </>

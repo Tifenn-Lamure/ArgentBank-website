@@ -18,6 +18,7 @@ const Transaction = () => {
                     AccountName="Argent Bank Checking (x8349)"
                     AccountAmount="2,082.79"
                     AccountDescription="Available Balance"
+                    DisplayTransactionButton={false}
                     ></Account>
                 </AccountStyle>
                 <section className="Array">
